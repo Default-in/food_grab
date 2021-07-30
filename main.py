@@ -3,8 +3,7 @@ from constants import resto
 
 
 def foodGrab(location, web_driver):
-    web_driver = chrome_driver()
-    driver.get("https://food.grab.com/ph/en/")
+    web_driver.get("https://food.grab.com/ph/en/")
     wait(5)
     searchLocation(web_driver, location)
     loadMoreButton(web_driver)
