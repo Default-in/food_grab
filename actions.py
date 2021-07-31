@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+
 # Google sheet scopes
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
          "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
@@ -11,6 +12,15 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
 
 client = gspread.authorize(creds)
+
+
+def foodGrab(location, web_driver):
+    web_driver.get("https://food.grab.com/ph/en/")
+    wait(5)
+    searchLocation(web_driver, location)
+    loadMoreButton(web_driver)
+    names_list = restroName(web_driver)
+    return names_list
 
 
 def sheet_data():
@@ -64,14 +74,13 @@ def searchLocation(driver, location):
 
 def restroName(driver):
     names_list = []
-    # driver.execute_script("window.scroll(0, 0);")
     for item in driver.find_elements_by_css_selector("h6.name___2epcT"):
         names_list.append(item.text)
 
     return names_list
 
 
-def findAddress(driver, name):
+def findLatLong(driver, name):
     latitude = "NA"
     longitude = "NA"
     try:
